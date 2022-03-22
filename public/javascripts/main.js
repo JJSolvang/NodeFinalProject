@@ -12,14 +12,23 @@ let NoteObject = function (pTitle, pYear, pType) {
 document.addEventListener("DOMContentLoaded", function (event) {
 
     document.getElementById("buttonAdd").addEventListener("click", function () {
-        $.get("/getSelectedType", function(data, status) {
-            selectedType = data;
-            
-            noteArray.push(new NoteObject(document.getElementById("title").value, document.getElementById("year").value, selectedType));
-            console.log(noteArray);
-            document.getElementById("title").value = "";
-            document.getElementById("year").value = "";
+        let newGame = (new NoteObject(document.getElementById("title").value, document.getElementById("year").value, selectedType));
+        console.log(newGame);
+        document.getElementById("title").value = "";
+        document.getElementById("year").value = "";
+        
+        $.ajax({
+            url : "/add",
+            type: "POST",
+            data: JSON.stringify(newGame),
+            contentType: "application/json; charset=utf-8",
+            success: function (result) {
+            console.log(result);
+            }
         });
+
+
+        document.location.href = "index.html#add";
     });
 
     $(document).bind("change", "#select-type", function (event, ui) {
@@ -57,7 +66,17 @@ function createList() {
         let newGameArray = Array.from(liList);
         newGameArray.forEach(function (element, i) {
             element.addEventListener('click', function () {
-                favNoteArray.push(noteArray[i]);
+                let newFavGame = noteArray[i];
+
+                $.ajax({
+                    url : "/favorites",
+                    type: "POST",
+                    data: JSON.stringify(newFavGame),
+                    contentType: "application/json; charset=utf-8",
+                    success: function (result) {
+                    console.log(result);
+                    }
+                });
             });
         });
     });

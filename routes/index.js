@@ -36,4 +36,28 @@ router.get("/getAllFavGames", function(req, res) {
   res.status(200).json(serverFavNoteArray)
 });
 
+// add new note
+router.post('/add', function(req, res) {
+  const newGame = req.body;
+  console.log(newGame);
+  serverNoteArray.push(newGame);
+  var response = {
+    status  : 200,
+    success : 'Added successfully'
+  }
+  res.end(JSON.stringify(response));
+});
+
+// add new favorite note
+router.post('/favorites', function(req, res) {
+  const newFavGame = req.body;
+  console.log(newFavGame);
+  serverFavNoteArray.push(newFavGame);
+  var response = {
+    status  : 200,
+    success : 'Added successfully'
+  }
+  res.end(JSON.stringify(response));
+});
+
 module.exports = router;
